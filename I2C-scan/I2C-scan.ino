@@ -1,29 +1,41 @@
 #include <Wire.h>
 
-// Codes for Korvo V1.1
-#define I2C_SDA 19  
-#define I2C_SCL 32
-
-//Devices found:
-//0x18
-//0x40
-
 void setup() {
-    Wire.begin(I2C_SDA, I2C_SCL);
-    Serial.begin(115200);
-}
-void scanI2C() {
-    Serial.println("Scanning I2C...");
-    for (byte address = 1; address < 127; address++) {
-        Wire.beginTransmission(address);
-        if (Wire.endTransmission() == 0) {
-            Serial.print("Device found at 0x");
-            Serial.println(address, HEX);
-        }
+  Serial.begin(115200);  // Start the serial communication at 115200 baud rate
+
+  Wire.begin(19, 32);  // Initialize I2C with SDA pin 19 and SCL pin 32 (Korvo V1.1 pins)
+
+  Serial.println("\nI2C Scanning...");
+
+  // Scan the I2C bus for devices
+  byte error, address;
+  int nDevices = 0;
+
+  for (address = 1; address < 127; address++) {
+    // Try to communicate with the I2C device at this address
+    Serial.print("checking - ");
+    Serial.println(address, HEX);
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0) {
+      // Device found
+      Serial.print("I2C device found at address 0x");
+      Serial.print(address, HEX);
+      Serial.println("  (click to see the part)");
+
+      nDevices++;
+      delay(500);  // Wait for half a second
     }
+  }
+
+  if (nDevices == 0) {
+    Serial.println("No I2C devices found");
+  } else {
+    Serial.println("I2C scan complete.");
+  }
 }
 
 void loop() {
-    scanI2C();
-    delay(5000);
+  // Nothing to do here
 }
