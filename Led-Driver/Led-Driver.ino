@@ -19,7 +19,7 @@ Adafruit_PWMServoDriver pca9685 = Adafruit_PWMServoDriver(0x18); // Default I2C 
 int cycleCount = 0;
 int cycles = 100;
 int buttonPress = 10;
-int brightness = 128;
+int brightness = 64;
 CRGB leds[NUM_LEDS];
 
 void setup() {
